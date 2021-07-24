@@ -8,14 +8,14 @@ import * as SockJS from 'sockjs-client';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'grokonez';
-  description = 'Angular-WebSocket Demo';
 
-  greetings: string[] = [];
+  orders: string[] = [];
   disabled = true;
   name: string;
   private stompClient = null;
-  private room = 'my_room';
+
+  producerId = 2;
+  consumerId = 11;
 
   constructor() { }
 
@@ -23,7 +23,7 @@ export class AppComponent {
     this.disabled = !connected;
 
     if (connected) {
-      this.greetings = [];
+      this.orders = [];
     }
   }
 
@@ -36,8 +36,8 @@ export class AppComponent {
       _this.setConnected(true);
       console.log('Connected: ' + frame);
 
-      _this.stompClient.subscribe('/stream/newOrder', function (hello) {
-        _this.showGreeting(JSON.parse(hello.body).greeting);
+      _this.stompClient.subscribe(`/stream/newOrder/${_this.producerId}`, function (payload) {
+        _this.showGreeting(JSON.parse(payload.body).data);
       });
     });
   }
@@ -53,13 +53,13 @@ export class AppComponent {
 
   sendName() {
     this.stompClient.send(
-      '/api/token',
+      `/api/newOrders/${this.producerId}/${this.consumerId}`,
       {},
-      JSON.stringify({ 'name': this.name })
+      JSON.stringify({ 'data': 'some data' })
     );
   }
 
-  showGreeting(message) {
-    this.greetings.push(message);
+  showGreeting(order) {
+    this.orders.push(order);
   }
 }

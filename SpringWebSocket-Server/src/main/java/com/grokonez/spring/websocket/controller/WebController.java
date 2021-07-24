@@ -1,31 +1,59 @@
 package com.grokonez.spring.websocket.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.grokonez.spring.websocket.model.Order;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
-import com.grokonez.spring.websocket.model.Hello;
-import com.grokonez.spring.websocket.model.User;
+import javax.annotation.PostConstruct;
+import java.util.*;
+
 
 @Controller
 public class WebController {
 
-	@Autowired
-	private SimpMessagingTemplate simpMessagingTemplate;
+	private final SimpMessagingTemplate simpMessagingTemplate;
 
-	private String room = "my_room";
+	// DB Mock just for test.
+	private Map<Integer, List<Integer>> producerToConsumersStore = new HashMap<>();
 
-	@MessageMapping("/token")
-	public void greeting(@DestinationVariable String room) {
-		System.out.println(room);
+	public WebController(SimpMessagingTemplate simpMessagingTemplate) {
+		this.simpMessagingTemplate = simpMessagingTemplate;
 	}
 
-	@Scheduled(fixedDelay = 1000, initialDelay = 1000)
-	public void send() {
-		simpMessagingTemplate.convertAndSend("/stream/newOrder", new Hello("Hi from server"));
+	@PostConstruct
+	public void postConstruct() {
+		List<Integer> firstProducer = new ArrayList<>();
+		firstProducer.add(10);
+		firstProducer.add(11);
+		producerToConsumersStore.put(1, firstProducer);
+
+		List<Integer> secondProducer = new ArrayList<>();
+		secondProducer.add(20);
+		secondProducer.add(21);
+		producerToConsumersStore.put(2, secondProducer);
 	}
+
+//	@MessageMapping("/newOrders/{producerId}/{consumerId}")
+//	public void greeting(@DestinationVariable Integer producerId,
+//						 @DestinationVariable Integer consumerId) {
+//		// Somehow bind consumer to stream dedicated to producerId (Each producer should send only own subscribers)
+//		System.out.println(producerId);
+//		System.out.println(consumerId);
+//	}
+
+	@Scheduled(fixedDelay = 3000, initialDelay = 1000)
+	public void sendFromFirstProducer() {
+		simpMessagingTemplate.convertAndSend("/stream/newOrder" + "/1",
+				new Order("sendFromFirstProducer only for consumers with ids 10 & 11"));
+	}
+
+	@Scheduled(fixedDelay = 2000, initialDelay = 1000)
+	public void sendFromSecondProducer() {
+		simpMessagingTemplate.convertAndSend("/stream/newOrder" + "/2",
+				new Order("sendFromSecondProducer only for consumers with ids 20 & 21"));
+	}
+
 }

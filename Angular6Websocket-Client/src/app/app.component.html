@@ -12,8 +12,8 @@
 
 <body>
   <div style="color: blue; text-align: center">
-    <h1>{{title}}</h1>
-    <h3>{{description}}</h3>
+    <h1>DEBUG</h1>
+    <h3>Stomp</h3>
   </div>
 
   <div class="container" style="width: 400px; margin-top: 20px;">
@@ -37,12 +37,12 @@
     <table id="conversation" class="table table-striped" style="margin-top: 20px;">
       <thead>
         <tr>
-          <th>Greetings</th>
+          <th>Orders data</th>
         </tr>
       </thead>
-      <tbody *ngFor="let greeting of greetings">
+      <tbody *ngFor="let order of orders">
         <tr>
-          <td>{{greeting}}</td>
+          <td>{{order}}</td>
         </tr>
       </tbody>
     </table>
