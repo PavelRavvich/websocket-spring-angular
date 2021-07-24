@@ -1,7 +1,10 @@
 package com.grokonez.spring.websocket.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
@@ -11,17 +14,18 @@ import com.grokonez.spring.websocket.model.User;
 @Controller
 public class WebController {
 
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
+
+	private String room = "my_room";
+
 	@MessageMapping("/hello")
-	@SendTo("/topic/hi")
-	public Hello greeting(User user) {
-		return new Hello("Hi, " + user.getName() + "!");
+	public void greeting(@DestinationVariable String room) {
+		System.out.println(room);
 	}
 
-	// Not work find simple solution
 	@Scheduled(fixedDelay = 1000, initialDelay = 1000)
 	public void send() {
-		User user = new User();
-		user.setName("Scheduled");
-		greeting(user);
+		simpMessagingTemplate.convertAndSend("/topic/hi", new Hello("Hi from server"));
 	}
 }

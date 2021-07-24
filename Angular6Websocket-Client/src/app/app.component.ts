@@ -15,6 +15,7 @@ export class AppComponent {
   disabled = true;
   name: string;
   private stompClient = null;
+  private room = 'my_room';
 
   constructor() { }
 
@@ -27,7 +28,7 @@ export class AppComponent {
   }
 
   connect() {
-    const socket = new SockJS('http://localhost:8080/gkz-stomp-endpoint');
+    const socket = new SockJS('http://localhost:8080/api/streams');
     this.stompClient = Stomp.over(socket);
 
     const _this = this;

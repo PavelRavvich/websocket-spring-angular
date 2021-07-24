@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/SpringWebSocket-Server.iml" filepath="$PROJECT_DIR$/.idea/SpringWebSocket-Server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SpringWebSocket/spring-boot-websocket-server.iml" filepath="$PROJECT_DIR$/SpringWebSocket/spring-boot-websocket-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-boot-websocket-server.iml" filepath="$PROJECT_DIR$/spring-boot-websocket-server.iml" />
     </modules>
   </component>
 </project>
