@@ -17,6 +17,8 @@ export class AppComponent {
   producerId = 2;
   consumerId = 11;
 
+  private token: string = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyNzE1MDYyNywiZXhwIjoxNjI3NzU1NDI3fQ.b-ijFWqZK3xNxPZuRdN2gK-anG3WPJn0vEHd06qV4zs';
+
   constructor() { }
 
   setConnected(connected: boolean) {
@@ -32,7 +34,7 @@ export class AppComponent {
     this.stompClient = Stomp.over(socket);
 
     const _this = this;
-    this.stompClient.connect({}, function (frame) {
+    this.stompClient.connect({Authorization: _this.token}, function (frame) {
       _this.setConnected(true);
       console.log('Connected: ' + frame);
 
@@ -54,7 +56,7 @@ export class AppComponent {
   sendName() {
     this.stompClient.send(
       `/api/newOrders/${this.producerId}/${this.consumerId}`,
-      {},
+      {Authorization: this.token},
       JSON.stringify({ 'data': 'some data' })
     );
   }
