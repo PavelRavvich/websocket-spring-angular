@@ -36,7 +36,7 @@ export class AppComponent {
       _this.setConnected(true);
       console.log('Connected: ' + frame);
 
-      _this.stompClient.subscribe('/topic/hi', function (hello) {
+      _this.stompClient.subscribe('/stream/newOrder', function (hello) {
         _this.showGreeting(JSON.parse(hello.body).greeting);
       });
     });
@@ -53,7 +53,7 @@ export class AppComponent {
 
   sendName() {
     this.stompClient.send(
-      '/gkz/hello',
+      '/api/token',
       {},
       JSON.stringify({ 'name': this.name })
     );

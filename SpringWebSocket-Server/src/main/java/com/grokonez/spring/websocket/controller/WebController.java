@@ -19,13 +19,13 @@ public class WebController {
 
 	private String room = "my_room";
 
-	@MessageMapping("/hello")
+	@MessageMapping("/token")
 	public void greeting(@DestinationVariable String room) {
 		System.out.println(room);
 	}
 
 	@Scheduled(fixedDelay = 1000, initialDelay = 1000)
 	public void send() {
-		simpMessagingTemplate.convertAndSend("/topic/hi", new Hello("Hi from server"));
+		simpMessagingTemplate.convertAndSend("/stream/newOrder", new Hello("Hi from server"));
 	}
 }
