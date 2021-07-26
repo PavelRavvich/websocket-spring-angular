@@ -14,7 +14,7 @@ export class AppComponent {
   name: string;
   private stompClient = null;
 
-  producerId = 2;
+  producerId = '68b0439b-82e7-4aa0-adec-cdd4e877f7ba';
   consumerId = 11;
 
   private token: string = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyNzE1MDYyNywiZXhwIjoxNjI3NzU1NDI3fQ.b-ijFWqZK3xNxPZuRdN2gK-anG3WPJn0vEHd06qV4zs';
@@ -30,7 +30,7 @@ export class AppComponent {
   }
 
   connect() {
-    const socket = new SockJS('http://localhost:8080/api/streams');
+    const socket = new SockJS('http://localhost:8081/api/streams');
     this.stompClient = Stomp.over(socket);
 
     const _this = this;
@@ -40,6 +40,7 @@ export class AppComponent {
 
       _this.stompClient.subscribe(`/stream/newOrder/${_this.producerId}`, function (payload) {
         _this.showGreeting(JSON.parse(payload.body).data);
+        console.log(payload);
       });
     });
   }
